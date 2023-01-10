@@ -34,13 +34,41 @@
    }
  }
 
+void exibicao(int segundos){
+
+    PORTA = 0;
+
+  //  if(segundos > 999){
+      PORTD = mask((segundos/1000)%10) ;
+      porta.f2 = 1; // Ativa display 1.
+      Delay_ms (tempo) ;
+      porta.f2 = 0; // Desativa display 1.
+    //}
+    
+    //if(segundos > 99){
+      PORTD = mask((segundos/100)%10);
+      porta.f3 = 1; // Ativa display 2.
+      Delay_ms ( tempo );
+      porta.f3 = 0; // Desativa display 2.
+    //}
+    
+    //if(segundos > 9){
+      PORTD = mask((segundos/10)%10);
+      porta.f4 = 1; // Ativa display 3.
+      Delay_ms ( tempo );
+      porta.f4 = 0; // Desativa display 3.
+    //}
+
+    PORTD = mask(segundos%10);
+    porta.f5 = 1; // Ativa display 4.
+    Delay_ms ( tempo );
+    porta.f5 = 0; // desativa display 4.
+
+}
+
 void main(){
   
   int segundos = 0;
-  int d1 = 0;
-  int d2 = 0;
-  int d3 = 0;
-  int d4 = 0;
   
   ADCON0 = 0X00 ;
   ADCON1 = 0X06 ; // desabilita conversor A/D.
@@ -53,38 +81,28 @@ void main(){
   
   while (1){ // inicio do loop infinito .
     
-    if(portb.rb0 == 0){
-        segundos++;
+    exibicao(segundos);
+    
+    if(segundos >= 0 && segundos < 9999){
+      if(portb.rb0 == 0){
+          segundos++;
+          exibicao(segundos);
+          delay_ms(50);
+      }
+
+      if(portb.rb1 == 0){
+         segundos--;
+         exibicao(segundos);
+      }
+
+      if(portb.rb2 == 0){
+         while(segundos != 0){
+             segundos--;
+             exibicao(segundos);
+             Delay_ms(1000);
+         }
+      }
     }
-    
-    if(portb.rb1 == 0){
-       segundos--;
-    }
-    
-    PORTD = mask((segundos/1000)%10) ;
-    porta.f2 = 1; // Ativa display 1.
-    Delay_ms (tempo) ;
-    porta.f2 = 0; // Desativa display 1.
-
-
-    PORTD = mask((segundos/100)%10);
-    porta.f3 = 1; // Ativa display 2.
-    Delay_ms ( tempo );
-    porta.f3 = 0; // Desativa display 2.
-
-
-    PORTD = mask((segundos/10)%10);
-    porta.f4 = 1; // Ativa display 3.
-    Delay_ms ( tempo );
-    porta.f4 = 0; // Desativa display 3.
-
-
-    PORTD = mask(segundos%10);
-    porta.f5 = 1; // Ativa display 4.
-    Delay_ms ( tempo );
-    porta.f5 = 0; // desativa display 4.
-    
-    }
-    
-
+  
+  }
 }
