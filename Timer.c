@@ -35,6 +35,13 @@
  }
 
 void main(){
+  
+  int segundos = 0;
+  int d1 = 0;
+  int d2 = 0;
+  int d3 = 0;
+  int d4 = 0;
+  
   ADCON0 = 0X00 ;
   ADCON1 = 0X06 ; // desabilita conversor A/D.
   INTCON = 0; // desabilita interrupcoes .
@@ -42,29 +49,42 @@ void main(){
   PORTA = 0;
   TRISD = 0; // configura portD como saida .
   PORTD = 0;
+  TRISB = 7; // Configura os pinos rb0, rb1 e rb2 como entrada
+  
   while (1){ // inicio do loop infinito .
-    // Escreve valor 1 no display 1 em codigo 7 segmentos .
-    PORTD = mask(1) ;
+    
+    if(portb.rb0 == 0){
+        segundos++;
+    }
+    
+    if(portb.rb1 == 0){
+       segundos--;
+    }
+    
+    PORTD = mask((segundos/1000)%10) ;
     porta.f2 = 1; // Ativa display 1.
     Delay_ms (tempo) ;
     porta.f2 = 0; // Desativa display 1.
 
-    // Escreve valor 2 no display 2 em codigo 7 segmentos .
-    PORTD = mask(2);
+
+    PORTD = mask((segundos/100)%10);
     porta.f3 = 1; // Ativa display 2.
     Delay_ms ( tempo );
-    porta . f3 = 0; // Desativa display 2.
+    porta.f3 = 0; // Desativa display 2.
 
-    // Escreve valor 3 no display 3 em codigo 7 segmentos
-    PORTD = mask(3);
+
+    PORTD = mask((segundos/10)%10);
     porta.f4 = 1; // Ativa display 3.
     Delay_ms ( tempo );
     porta.f4 = 0; // Desativa display 3.
 
-    // Escreve valor 4 no display 4 em codigo 7 segmentos .
-    PORTD = mask (4);
+
+    PORTD = mask(segundos%10);
     porta.f5 = 1; // Ativa display 4.
     Delay_ms ( tempo );
     porta.f5 = 0; // desativa display 4.
-    } // Fim do loop infinito
+    
+    }
+    
+
 }
