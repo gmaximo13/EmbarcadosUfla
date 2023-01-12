@@ -12,7 +12,7 @@
 ** **
 ** UFLA - Lavras /MG - 12/01/2023 **
 ***************************************************************** */
- // Define o tempo para a multiplexação dos displays.
+ // Define o tempo de acionamento dos displays.
  # define tempo 5
 
  // Converte valor numerico decimal para codigo 7 segmentos
@@ -48,17 +48,15 @@ void exibicao(int segundos){
     Delay_ms ( tempo );
     porta.f3 = 0; // Desativa display 2.
     
+    PORTD = mask((segundos/10)%10);
+    porta.f4 = 1; // Ativa display 3.
+    Delay_ms ( tempo );
+    porta.f4 = 0; // Desativa display 3.
 
-     PORTD = mask((segundos/10)%10);
-     porta.f4 = 1; // Ativa display 3.
-     Delay_ms ( tempo );
-     porta.f4 = 0; // Desativa display 3.
-
-     PORTD = mask(segundos%10);
-     porta.f5 = 1; // Ativa display 4.
-     Delay_ms ( tempo );
-     porta.f5 = 0; // desativa display 4.
-
+    PORTD = mask(segundos%10);
+    porta.f5 = 1; // Ativa display 4.
+    Delay_ms ( tempo );
+    porta.f5 = 0; // desativa display 4.
 }
 
 //Função responsavel por acionar o Buzzer
@@ -94,7 +92,7 @@ void main(){
   
   while (1){ // inicio do loop infinito.
     
-    exibicao(segundos);
+    exibicao(segundos); //Liga todos os display
     
     if(segundos >= 0 && segundos < 9999){ // Condição de limite do timer
       
