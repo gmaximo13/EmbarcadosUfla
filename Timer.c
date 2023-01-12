@@ -99,12 +99,14 @@ void main(){
     if(segundos >= 0 && segundos < 9999){ // Condição de limite do timer
       
       if(portb.rb0 == 0){ //Incrementa segundos quando o botão rb0 é acionado
+          Delay_ms(80); //Delay para garantir o incremento de um segundo por vez
           segundos++;
           exibicao(segundos);
       }
 
       if(portb.rb1 == 0){   //Decrementa segundos quando o botão rb1 é acionado
          if(segundos != 0){ //Impede que a variavel segundo seja menor que zero
+             Delay_ms(80);  //Delay para garantir o decremento de um segundo por vez
              segundos--;
          }
          exibicao(segundos);
